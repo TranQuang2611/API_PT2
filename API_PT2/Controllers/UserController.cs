@@ -2,6 +2,7 @@
 using API_PT2.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -26,7 +27,7 @@ namespace API_PT2.Controllers
         [HttpPost("Login")]
         public IActionResult ValidateUser(LoginModel model)
         {
-            var user = _bookStoreContext.Users.FirstOrDefault(x => x.EmailAddress == model.Email && x.Password == model.Password);
+            var user = _bookStoreContext.Users.Include(x => x.Role).FirstOrDefault(x => x.EmailAddress == model.Email && x.Password == model.Password);
             if(user == null)
             {
                 return Ok(new ApiRespond
@@ -61,7 +62,7 @@ namespace API_PT2.Controllers
                     new Claim(ClaimTypes.Name, user.FirstName + user.LastName),
 
                     //role
-
+                    new Claim(ClaimTypes.Role, user.Role.RoleName),
                     new Claim("TokenId", Guid.NewGuid().ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(1),

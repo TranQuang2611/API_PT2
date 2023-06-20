@@ -17,9 +17,10 @@ namespace API_PT2.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Ad")]
         public IActionResult Get()
         {
+
             return Ok();
         }
     }
