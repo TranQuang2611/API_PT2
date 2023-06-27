@@ -24,6 +24,13 @@ namespace API_PT2.Controllers
             _appSetttings = optionsMonitor.CurrentValue;
         }
 
+        [HttpGet("GetRoles")]
+        public IActionResult GetRoles()
+        {
+            var roles = _bookStoreContext.Roles.ToList();
+            return Ok(roles);
+        }
+
         [HttpPost("Login")]
         public IActionResult ValidateUser(LoginModel model)
         {

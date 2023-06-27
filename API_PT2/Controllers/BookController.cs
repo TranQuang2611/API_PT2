@@ -9,7 +9,7 @@ namespace API_PT2.Controllers
     [ApiController]
     public class BookController : ControllerBase
     {
-        private readonly BookStoreContext _bookStoreContext;
+        private readonly BookStoreContext _bookStoreContext = new BookStoreContext();
 
         public BookController(BookStoreContext bookStoreContext)
         {
@@ -17,11 +17,11 @@ namespace API_PT2.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = "Bearer", Roles = "Ad")]
+        [Authorize(AuthenticationSchemes = "Bearer", Roles = "admin")]
         public IActionResult Get()
         {
-
-            return Ok();
+            var listBook = _bookStoreContext.Books.ToList();
+            return Ok(listBook);
         }
     }
 }
