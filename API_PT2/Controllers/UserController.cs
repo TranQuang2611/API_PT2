@@ -1,5 +1,8 @@
 ﻿using API_PT2.DTO;
 using API_PT2.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +56,15 @@ namespace API_PT2.Controllers
                     Data = GenerateToken(user)
                 });
             }
+        }
+
+        [HttpPost("Logout")]
+        [Authorize]
+        public  IActionResult Logout()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            HttpContext.SignOutAsync(JwtBearerDefaults.AuthenticationScheme);
+            return Ok("Logout Successfull");
         }
 
         private string GenerateToken(User user)
